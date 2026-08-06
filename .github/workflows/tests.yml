@@ -37,7 +37,7 @@ jobs:
         run: mkdir -p allure-results
 
       - name: Testleri Koştur (Headless & Paralel)
-        run: npm run test:parallel
+        run: npm run test
         continue-on-error: true
 
       - name: Klasörün İçini Röntgenle (Debug)
