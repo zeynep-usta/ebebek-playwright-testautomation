@@ -26,14 +26,11 @@ jobs:
 
       - name: Playwright Tarayıcılarını Kur
         run: npx playwright install --with-deps chromium
-      - name: CI İçin Sahte .env Dosyası Yarat
-        run: touch .env
-      - name: Testleri Koştur (Headless & Paralel)
-        run: npm run test:parallel
-        env:
-          BASE_URL: ${{ secrets.BASE_URL }}
-          VALID_EMAIL: ${{ secrets.VALID_EMAIL }}
-          VALID_PASSWORD: ${{ secrets.VALID_PASSWORD }}
+      - name: CI İçin Gerçek .env Dosyasını Oluştur
+        run: |
+            echo "BASE_URL=${{ secrets.BASE_URL }}" > .env
+            echo "VALID_EMAIL=${{ secrets.VALID_EMAIL }}" >> .env
+            echo "VALID_PASSWORD=${{ secrets.VALID_PASSWORD }}" >> .env
 
       - name: Allure Sonuçlarını Artifact Olarak Kaydet
         if: always()
