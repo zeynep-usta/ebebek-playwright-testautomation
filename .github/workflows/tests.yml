@@ -26,7 +26,8 @@ jobs:
 
       - name: Playwright Tarayıcılarını Kur
         run: npx playwright install --with-deps chromium
-
+      - name: CI İçin Sahte .env Dosyası Yarat
+        run: touch .env
       - name: Testleri Koştur (Headless & Paralel)
         run: npm run test:parallel
         env:
