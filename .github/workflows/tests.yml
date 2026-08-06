@@ -1,0 +1,38 @@
+name: Playwright BDD Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodu İndir (Checkout)
+        uses: actions/checkout@v4
+
+      - name: Node.js Kurulumu
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Bağımlılıkları Yükle (npm install)
+        run: npm install
+
+      - name: Playwright Tarayıcılarını Kur
+        run: npx playwright install --with-deps chromium
+
+      - name: Testleri Koştur (Headless & Paralel)
+        run: npm run test:parallel
+
+      - name: Allure Sonuçlarını Artifact Olarak Kaydet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+          retention-days: 7

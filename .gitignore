@@ -1,0 +1,10 @@
+# NPM Bağımlılıkları (Bunlar GitHub'a gitmez, boyutları çok büyüktür)
+node_modules/
+
+# Şifreler ve Konfigürasyonlar (Güvenlik için gizli tutulur)
+.env
+
+# Raporlar, Cache'ler ve Test Çıktıları
+allure-results/
+test-results/
+.idea/
