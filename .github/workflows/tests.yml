@@ -32,10 +32,20 @@ jobs:
             echo "VALID_EMAIL=${{ secrets.VALID_EMAIL }}" >> .env
             echo "VALID_PASSWORD=${{ secrets.VALID_PASSWORD }}" >> .env
 
+      - name: Allure Klasörünü Önceden Yarat
+        run: mkdir -p allure-results
+
+      - name: Testleri Koştur (Headless & Paralel)
+        run: npm run test:parallel
+
+      - name: Klasörleri Denetle (Debug)
+        if: always()
+        run: ls -la
+
       - name: Allure Sonuçlarını Artifact Olarak Kaydet
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
-          path: allure-results/
-          retention-days: 7
+         name: allure-results
+         path: allure-results
+         retention-days: 7
