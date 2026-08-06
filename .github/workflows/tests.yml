@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ main, master ]
   workflow_dispatch: {}
+
 jobs:
   test:
     timeout-minutes: 60
@@ -18,7 +19,7 @@ jobs:
       - name: Node.js Kurulumu
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Bağımlılıkları Yükle (npm install)
         run: npm install
@@ -28,6 +29,10 @@ jobs:
 
       - name: Testleri Koştur (Headless & Paralel)
         run: npm run test:parallel
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          VALID_EMAIL: ${{ secrets.VALID_EMAIL }}
+          VALID_PASSWORD: ${{ secrets.VALID_PASSWORD }}
 
       - name: Allure Sonuçlarını Artifact Olarak Kaydet
         if: always()
