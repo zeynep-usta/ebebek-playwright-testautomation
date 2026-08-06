@@ -19,7 +19,7 @@ jobs:
       - name: Node.js Kurulumu
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20 # 24'teki uyumsuzluktan kaçmak için stabil 20'ye döndük
 
       - name: Bağımlılıkları Yükle (npm install)
         run: npm install
@@ -27,15 +27,11 @@ jobs:
       - name: Playwright Tarayıcılarını Kur
         run: npx playwright install --with-deps chromium
 
-      - name: CI İçin Gerçek .env Dosyasını Oluştur (Güvenli Yöntem)
+      - name: CI İçin Gerçek .env Dosyasını Oluştur
         run: |
-          echo "BASE_URL=$MY_URL" > .env
-          echo "VALID_EMAIL=$MY_EMAIL" >> .env
-          echo "VALID_PASSWORD=$MY_PASS" >> .env
-        env:
-          MY_URL: ${{ secrets.BASE_URL }}
-          MY_EMAIL: ${{ secrets.VALID_EMAIL }}
-          MY_PASS: ${{ secrets.VALID_PASSWORD }}
+          echo "BASE_URL=${{ secrets.BASE_URL }}" > .env
+          echo "VALID_EMAIL=${{ secrets.VALID_EMAIL }}" >> .env
+          echo "VALID_PASSWORD=${{ secrets.VALID_PASSWORD }}" >> .env
 
       - name: Allure Klasörünü Önceden Yarat
         run: mkdir -p allure-results
@@ -43,6 +39,9 @@ jobs:
       - name: Testleri Koştur (Headless & Paralel)
         run: npm run test:parallel
         continue-on-error: true
+
+      - name: Klasörün İçini Röntgenle (Debug)
+        run: ls -la allure-results
 
       - name: Allure Sonuçlarını Artifact Olarak Kaydet
         if: always()
